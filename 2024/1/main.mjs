@@ -14,7 +14,14 @@ array1 = array1.sort((a,b) => a-b)
 array2 = array2.sort((a,b) => a-b)
 
 let result = array1.reduce((sum, num, index) => {
-    return sum + Math.abs(num - array2[index])
+
+    
+
+
+    return sum + num*array2.filter(num2 => num2 == num).length
 }, 0)
 
 console.log(result)
+
+// Answer 1: 2192892
+// Answer 2: 22962826
