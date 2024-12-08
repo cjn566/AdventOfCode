@@ -1,20 +1,16 @@
 import fs from 'fs'
-const input = fs.readFileSync('2024/1/input.txt', 'utf8')
+import path from 'path'
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
+const input = fs.readFileSync(path.join(dirname(fileURLToPath(import.meta.url)), 'input.txt'), 'utf8')
 
-let array = input.split('\n')
+let lines = input.split('\n')
 
-let array1 = [], array2 = []
-
-array.map(line => {
-    let numbers = line.split(' ')
-    array1.push(parseInt(numbers[0]))
-    array2.push(parseInt(numbers[3]))
+lines.map(line => {
+    return line
 })
 
-array1 = array1.sort((a,b) => a-b)
-array2 = array2.sort((a,b) => a-b)
-
-let result = array1.reduce((sum, num, index) => {
+let result = lines.reduce((sum, num, index) => {
 
     return sum 
 }, 0)
