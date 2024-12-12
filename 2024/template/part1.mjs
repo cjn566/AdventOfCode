@@ -20,7 +20,7 @@ let result = lines.reduce((sum, num, index) => {
 }, 0)
 
 
-console.log(`Execution time: ${end - start} ms`);
+console.log(`Execution time: ${performance.now() - start} ms`);
 console.log(result)
 
 // Answer 1: 
