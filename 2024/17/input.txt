@@ -1,0 +1,137 @@
+Register A: 30886132
+Register B: 0
+Register C: 0
+
+Program: 2,4,1,1,7,5,0,3,1,4,4,4,5,5,3,0
+         0   1   2   3   4   5   6   7
+
+
+
+
+0:  B = A & 8
+
+1:  B = B ^ 1
+
+2:  C = A >> B
+
+3:  A = A >> 3
+
+4:  B = B ^ 4
+
+5:  B = B ^ C
+
+6:  B & 7 ?
+
+7: if anything is in A, start over
+
+
+ C ^ ( last 3 of B )
+
+
+let programStr = /Program: (.+)/.exec(input)[1]
+let p = programStr.split(',').map(d => parseInt(d))
+
+let A = 0
+for (let i = p.length - 1; i >= 0; i--) {
+
+    for (let t = 0; t < 8; t++) {
+        let a = t
+        let b = a ^ 1
+        let c = a >> b
+        a >>= 3
+        b ^= a
+        b ^= c
+        if (b === p[i]){
+            A <<= 3
+            A += b
+            break
+        }
+    }
+}
+
+
+
+
+console.log(`Execution time: ${performance.now() - start} ms`);
+// console.log(i)
+
+// Answer 1:
+// Answer 2: 
+
+
+
+
+import fs from 'fs'
+import path from 'path'
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
+import { error } from 'console';
+const input = fs.readFileSync(path.join(dirname(fileURLToPath(import.meta.url)), 'sample.txt'), 'utf8')
+const start = performance.now()
+
+let A = parseInt(/A: (\d+)/.exec(input)[1])
+let B = parseInt(/B: (\d+)/.exec(input)[1])
+let C = parseInt(/C: (\d+)/.exec(input)[1])
+let program = /Program: (.+)/.exec(input)[1].split(',').map(d => parseInt(d))
+
+
+function getOperand(combo) {
+    switch (combo) {
+        case 0:
+        case 1:
+        case 2:
+        case 3:
+            return combo
+        case 4: return A
+        case 5: return B
+        case 6: return C
+        case 7: throw new error
+    }
+}
+
+let opcIdx = 0, oc, lo, co
+let out = []
+while (opcIdx < program.length) {
+    oc = program[opcIdx]
+    lo = program[opcIdx + 1]
+    co = getOperand(lo)
+    switch (oc) {
+        case 0: // 'adv' division   : A / (2 ^ co) -> A
+            A = A >> co
+            break
+        case 1: // 'bxl' XOR        : B xor lo -> B
+            B ^= lo
+            break
+        case 2: // 'bst' mod8       : co % 8 -> B
+            B = co >> 3
+            break
+        case 3: // 'jnz' jump?      : !A ? - : jump to instruction pointer
+            if(A) {
+                opcIdx = lo
+                continue
+            }
+            break
+        case 4: // 'bxc' XOR        : B xor C -> B (ignore operand)
+            B ^= C
+            break
+        case 5: // 'out'            : co mod8 -> out
+            out.push(co % 8)
+            break
+        case 6: // 'bdv'            : A / (2 ^ co) -> B
+            B = A >> co
+            break
+        case 7: // 'cdv'            : A / (2 ^ co) -> C
+            C = A >> co
+            break
+    }
+    opcIdx += 2
+}
+
+let result = out.join(',')
+
+
+console.log(`Execution time: ${performance.now() - start} ms`);
+console.log(result)
+
+// Answer 1:
+// Answer 2: 
